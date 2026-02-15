@@ -1,205 +1,81 @@
-"use client";
-
 import Link from "next/link";
-import { useState } from "react";
-
-// ─── DATA ────────────────────────────────────────────────────────────────────
-
-const services = [
-  {
-    colorHex: "#3b82f6",
-    iconPath: "M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4",
-    title: "Web Development",
-    shortDesc: "Modern, performant web applications.",
-    longDesc:
-      "We design and build custom web applications tailored to your business — from sleek marketing sites to complex platforms. Every project is built with scalability, speed, and great user experience at its core.",
-    highlights: ["Next.js & React", "API Integration", "Performance Audits"],
-  },
-  {
-    colorHex: "#8b5cf6",
-    iconPath:
-      "M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z",
-    title: "Mobile Apps",
-    shortDesc: "Native & cross-platform mobile experiences.",
-    longDesc:
-      "From iOS to Android, we craft apps that feel at home on every device. Whether it's a consumer product or an internal tool, we prioritise smooth interactions and polished design at every screen size.",
-    highlights: ["iOS & Android", "React Native", "App Store Optimisation"],
-  },
-  {
-    colorHex: "#10b981",
-    iconPath:
-      "M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z",
-    title: "Digital Marketing",
-    shortDesc: "Strategy that drives real, measurable growth.",
-    longDesc:
-      "We build data-driven campaigns across search, social, and email — all aligned to your revenue goals. No vanity metrics, just clear ROI and sustainable growth strategies that compound over time.",
-    highlights: ["SEO & SEM", "Paid Social", "Conversion Optimisation"],
-  },
-  {
-    colorHex: "#06b6d4",
-    iconPath:
-      "M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z",
-    title: "AI Solutions",
-    shortDesc: "Intelligent tools built for your workflow.",
-    longDesc:
-      "From custom chatbots to automated pipelines, we integrate AI where it creates the most value for your business. We cut through the hype and focus on practical automation that saves time and scales effortlessly.",
-    highlights: ["Custom LLM Apps", "Process Automation", "AI Chatbots"],
-  },
-  {
-    colorHex: "#ef4444",
-    iconPath:
-      "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z",
-    title: "Data Analytics",
-    shortDesc: "Turn raw data into decisions that matter.",
-    longDesc:
-      "We build dashboards, reports, and analytics pipelines that surface the insights your team actually needs. From data warehousing to live visualisations, we make your data work as hard as you do.",
-    highlights: ["Custom Dashboards", "Data Pipelines", "BI Tools"],
-  },
-  {
-    colorHex: "#f59e0b",
-    iconPath:
-      "M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4",
-    title: "IT Consulting",
-    shortDesc: "Strategic guidance for smarter tech decisions.",
-    longDesc:
-      "Navigating technology decisions is complex. We act as your trusted advisor — helping you choose, implement, and manage the right tools and infrastructure so you can focus on building your business.",
-    highlights: ["Tech Audits", "Architecture Planning", "Vendor Selection"],
-  },
-];
-
-const stats = [
-  { value: "200+", label: "Projects Delivered" },
-  { value: "98%", label: "Client Satisfaction" },
-  { value: "8+", label: "Years of Experience" },
-  { value: "50+", label: "Team Members" },
-];
-
-const process = [
-  {
-    step: "01",
-    title: "Discover",
-    desc: "We learn your goals, constraints, and vision through focused discovery sessions.",
-    color: "#3b82f6",
-  },
-  {
-    step: "02",
-    title: "Strategise",
-    desc: "We map a clear roadmap — architecture, timelines, and milestones aligned to your business.",
-    color: "#8b5cf6",
-  },
-  {
-    step: "03",
-    title: "Build",
-    desc: "Our team executes with agile sprints, continuous delivery, and transparent communication.",
-    color: "#10b981",
-  },
-  {
-    step: "04",
-    title: "Launch",
-    desc: "We deploy, monitor, and support — ensuring a smooth go-live and long-term performance.",
-    color: "#f59e0b",
-  },
-];
-
-const techStack = [
-  {
-    label: "Digital Marketing",
-    color: "#3b82f6",
-    icon: "M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z",
-    delay: "0s",
-    pos: "top-10 left-8 md:left-12",
-  },
-  {
-    label: "Web Development",
-    color: "#10b981",
-    icon: "M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4",
-    delay: "0.4s",
-    pos: "top-28 right-8 md:right-12",
-  },
-  {
-    label: "Data Visualisation",
-    color: "#ef4444",
-    icon: "M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z",
-    delay: "0.2s",
-    pos: "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
-  },
-  {
-    label: "Mobile Apps",
-    color: "#8b5cf6",
-    icon: "M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z",
-    delay: "0.6s",
-    pos: "bottom-28 left-8 md:left-16",
-  },
-  {
-    label: "AI ChatBot",
-    color: "#06b6d4",
-    icon: "M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z",
-    delay: "0.8s",
-    pos: "bottom-10 right-8 md:right-12",
-  },
-];
-
-// ─── PAGE ────────────────────────────────────────────────────────────────────
-
 export default function Home() {
-  const [activeService, setActiveService] = useState<number | null>(null);
-
-  const toggle = (i: number) =>
-    setActiveService((prev) => (prev === i ? null : i));
-
   return (
-    <main className="min-h-screen bg-white pt-6 md:pt-4">
-      {/* ── HERO ── */}
-      <section className="relative px-4 sm:px-6 lg:px-8 py-16 md:py-24 max-w-7xl mx-auto overflow-hidden">
-        <div className="absolute -top-32 -right-32 w-[500px] h-[500px] bg-blue-50 rounded-full blur-3xl opacity-70 pointer-events-none" />
-        <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-violet-50 rounded-full blur-3xl opacity-60 pointer-events-none" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-50 rounded-full blur-3xl opacity-30 pointer-events-none" />
-
-        <div className="relative grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          <div className="space-y-8 text-center lg:text-left">
-            <span className="inline-block text-xs font-semibold tracking-[0.3em] uppercase text-blue-500 bg-blue-50 px-4 py-1.5 rounded-full">
-              IT Services & Solutions
-            </span>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-[1.05] text-gray-900 tracking-tight">
-              Stay ahead with
-              <br />
-              progressive
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-violet-600">
-                IT strategies.
+    <main className="min-h-screen bg-[#f5f3ef] overflow-hidden">
+      {/* ── HERO SECTION ── */}
+      <section className="relative min-h-screen flex items-center px-6 sm:px-10 lg:px-16 max-w-[1400px] mx-auto pt-20 pb-16">
+        {/* Large ghost text watermark */}
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[clamp(80px,18vw,220px)] font-black tracking-[-0.06em] pointer-events-none select-none leading-none whitespace-nowrap"
+          style={{ color: "rgba(0,0,0,0.035)" }}
+        >
+          BRINOVA
+        </div>
+        <div className="relative w-full grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-16 lg:gap-24 items-center">
+          {/* LEFT — Text */}
+          <div className="space-y-10">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-black/15 bg-white/60 backdrop-blur-sm">
+              <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+              <span className="text-xs font-semibold tracking-[0.18em] uppercase text-gray-600">
+                IT Services & Solutions
               </span>
-            </h1>
-            <p className="text-base md:text-lg text-gray-500 max-w-lg mx-auto lg:mx-0 leading-relaxed">
+            </div>
+            <div>
+              <h1
+                className="font-black leading-[0.95] tracking-[-0.04em] text-gray-950"
+                style={{ fontSize: "clamp(3rem, 7vw, 6rem)" }}
+              >
+                Stay ahead
+                <br />
+                <span className="italic font-light text-gray-500 tracking-[-0.02em">
+                  of the curve
+                </span>
+                <br />
+                with bold
+                <br />
+                <span className="relative inline-block">
+                  <span className="relative z-10">IT strategy.</span>
+                  <span
+                    className="absolute bottom-2 left-0 w-full h-4 -z-0"
+                    style={{
+                      background:
+                        "linear-gradient(90deg, #facc15 0%, #fb923c 100%)",
+                      borderRadius: 2,
+                    }}
+                  />
+                </span>
+              </h1>
+            </div>
+            <p className="text-base md:text-lg text-gray-500 max-w-md leading-relaxed font-light">
               A results-driven IT services company focused on understanding your
               business goals and delivering scalable, modern technology
               solutions.
             </p>
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-1">
+            {/* Stats row */}
+            <div className="flex gap-10 pt-2">
               {[
-                { label: "200+ Projects", color: "#3b82f6" },
-                { label: "98% Satisfaction", color: "#10b981" },
-                { label: "8+ Years", color: "#f59e0b" },
-              ].map((badge, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-1.5 text-xs font-semibold text-gray-600 bg-gray-50 border border-gray-100 rounded-full px-3 py-1.5"
-                >
-                  <span
-                    className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                    style={{ background: badge.color }}
-                  />
-                  {badge.label}
+                { num: "120+", label: "Projects Delivered" },
+                { num: "98%", label: "Client Satisfaction" },
+                { num: "8yr", label: "Industry Experience" },
+              ].map((s, i) => (
+                <div key={i} className="space-y-1">
+                  <div className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
+                    {s.num}
+                  </div>
+                  <div className="text-xs text-gray-400 font-medium tracking-wide">
+                    {s.label}
+                  </div>
                 </div>
               ))}
             </div>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start pt-1">
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
               <Link
                 href="/contact"
-                className="group inline-flex items-center justify-center gap-0 hover:gap-2.5 px-8 py-3.5 text-base font-semibold text-white bg-gray-900 rounded-full hover:bg-gray-700 transition-all duration-300 shadow-md hover:shadow-lg"
+                className="group inline-flex items-center justify-center gap-3 px-8 py-4 text-sm font-bold tracking-[0.06em] uppercase text-white bg-gray-950 rounded-full hover:bg-gray-800 transition-all duration-300 shadow-xl shadow-black/20 hover:shadow-black/30 hover:scale-[1.02]"
               >
                 Contact Us
                 <svg
-                  className="w-4 h-4 opacity-0 group-hover:opacity-100 scale-75 group-hover:scale-100 transition-all duration-300"
+                  className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -214,347 +90,560 @@ export default function Home() {
               </Link>
               <Link
                 href="/portfolio"
-                className="inline-flex items-center justify-center px-8 py-3.5 text-base font-semibold text-gray-800 bg-gray-100 rounded-full hover:bg-gray-200 transition-all duration-200"
+                className="inline-flex items-center justify-center px-8 py-4 text-sm font-bold tracking-[0.06em] uppercase text-gray-900 bg-transparent border-2 border-gray-900/25 rounded-full hover:border-gray-900/60 transition-all duration-300 hover:scale-[1.02]"
               >
                 View Projects
               </Link>
             </div>
           </div>
-
-          <div className="relative h-[420px] sm:h-[500px] lg:h-[560px] rounded-3xl overflow-hidden bg-gray-900 shadow-2xl ring-1 ring-white/10">
-            <div className="absolute inset-0 opacity-[0.08]">
-              <div className="w-full h-full bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:48px_48px]" />
-            </div>
-            <div className="absolute top-0 right-0 w-72 h-72 bg-blue-500/15 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-72 h-72 bg-violet-500/15 rounded-full blur-3xl" />
-            <div className="absolute inset-0 p-6 md:p-8">
-              {techStack.map((item, i) => (
+          {/* RIGHT — Black panel with floating service tiles */}
+          <div className="relative">
+            {/* Main dark card */}
+            <div
+              className="relative rounded-[2.5rem] overflow-hidden"
+              style={{
+                background:
+                  "linear-gradient(145deg, #0f0f0f 0%, #1a1a2e 50%, #0f0f0f 100%)",
+                boxShadow:
+                  "0 60px 120px -20px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.06)",
+                minHeight: 560,
+              }}
+            >
+              {/* Grid texture */}
+              <div
+                className="absolute inset-0 opacity-[0.07]"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
+                  backgroundSize: "40px 40px",
+                }}
+              />
+              {/* Ambient orbs */}
+              <div
+                className="absolute top-0 right-0 w-72 h-72 rounded-full blur-[80px]"
+                style={{
+                  background:
+                    "radial-gradient(circle, rgba(99,102,241,0.25) 0%, transparent 70%)",
+                }}
+              />
+              <div
+                className="absolute bottom-0 left-0 w-64 h-64 rounded-full blur-[80px]"
+                style={{
+                  background:
+                    "radial-gradient(circle, rgba(16,185,129,0.18) 0%, transparent 70%)",
+                }}
+              />
+              <div
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full blur-[60px]"
+                style={{
+                  background:
+                    "radial-gradient(circle, rgba(251,146,60,0.12) 0%, transparent 70%)",
+                }}
+              />
+              {/* Central badge */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">
                 <div
-                  key={i}
-                  className={`absolute ${item.pos} bg-white/8 backdrop-blur-md px-4 md:px-5 py-3 md:py-3.5 rounded-2xl border border-white/15 shadow-lg`}
+                  className="w-20 h-20 rounded-[1.2rem] flex flex-col items-center justify-center border border-white/10 shadow-2xl"
                   style={{
-                    animation: `floatCard 4s ease-in-out infinite`,
-                    animationDelay: item.delay,
+                    background: "rgba(255,255,255,0.07)",
+                    backdropFilter: "blur(16px)",
                   }}
                 >
-                  <div className="flex items-center gap-2.5">
-                    <div
-                      className="w-8 h-8 md:w-9 md:h-9 rounded-lg flex items-center justify-center shrink-0"
-                      style={{ background: `${item.color}25` }}
-                    >
-                      <svg
-                        className="w-4 h-4 md:w-5 md:h-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke={item.color}
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d={item.icon}
-                        />
-                      </svg>
-                    </div>
-                    <span className="text-white font-semibold text-sm whitespace-nowrap">
-                      {item.label}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── STATS STRIP ── */}
-      <section className="border-y border-gray-100 bg-gray-50/60">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0 lg:divide-x divide-gray-200">
-          {stats.map((s, i) => (
-            <div key={i} className="text-center lg:px-8">
-              <p className="text-4xl lg:text-5xl font-bold text-gray-900">
-                {s.value}
-              </p>
-              <p className="text-sm text-gray-500 mt-1.5 font-medium">
-                {s.label}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── SERVICES ACCORDION ── */}
-      <section className="px-4 sm:px-6 lg:px-8 py-20 md:py-28 max-w-6xl mx-auto">
-        {/* Section header — asymmetric two-col */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-          <div>
-            <span className="inline-block text-xs font-semibold tracking-[0.3em] uppercase text-blue-500 bg-blue-50 px-4 py-1.5 rounded-full mb-5">
-              What We Offer
-            </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-              Six ways we move
-              <br />
-              your business forward.
-            </h2>
-          </div>
-        </div>
-
-        {/* Accordion */}
-        <div className="divide-y divide-gray-100">
-          {services.map((s, i) => {
-            const isOpen = activeService === i;
-            return (
-              <div key={i}>
-                {/* Trigger row */}
-                <button
-                  onClick={() => toggle(i)}
-                  className="w-full flex items-center gap-5 py-6 text-left"
-                >
-                  {/* Number */}
-                  <span
-                    className="text-xs font-bold tabular-nums w-7 flex-shrink-0 transition-colors duration-300"
-                    style={{ color: isOpen ? s.colorHex : "#d1d5db" }}
+                  <svg
+                    className="w-8 h-8 text-white mb-0.5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                   >
-                    {String(i + 1).padStart(2, "0")}
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
+                  </svg>
+                  <span className="text-[9px] font-bold uppercase tracking-widest text-white/50 mt-1">
+                    CORE
                   </span>
-
-                  {/* Icon pill */}
+                </div>
+                {/* Connecting ring */}
+                <div
+                  className="absolute inset-[-24px] rounded-full border border-white/[0.06] animate-spin"
+                  style={{ animationDuration: "18s" }}
+                />
+                <div
+                  className="absolute inset-[-44px] rounded-full border border-white/[0.04] animate-spin"
+                  style={{
+                    animationDuration: "30s",
+                    animationDirection: "reverse",
+                  }}
+                />
+              </div>
+              {/* Service tiles — orbiting the center */}
+              {/* Top left */}
+              <ServiceTile
+                top="12%"
+                left="6%"
+                color="#6366f1"
+                bgColor="rgba(99,102,241,0.15)"
+                icon={<CloudIcon />}
+                label="Digital Marketing"
+                delay="0s"
+              />
+              {/* Top right */}
+              <ServiceTile
+                top="8%"
+                right="8%"
+                color="#10b981"
+                bgColor="rgba(16,185,129,0.15)"
+                icon={<CodeIcon />}
+                label="Web Development"
+                delay="0.4s"
+              />
+              {/* Middle right */}
+              <ServiceTile
+                top="42%"
+                right="4%"
+                color="#f59e0b"
+                bgColor="rgba(245,158,11,0.15)"
+                icon={<ChartIcon />}
+                label="Data Analytics"
+                delay="0.8s"
+              />
+              {/* Bottom right */}
+              <ServiceTile
+                bottom="10%"
+                right="8%"
+                color="#06b6d4"
+                bgColor="rgba(6,182,212,0.15)"
+                icon={<BotIcon />}
+                label="AI Solutions"
+                delay="1.2s"
+              />
+              {/* Bottom left */}
+              <ServiceTile
+                bottom="14%"
+                left="5%"
+                color="#a855f7"
+                bgColor="rgba(168,85,247,0.15)"
+                icon={<MobileIcon />}
+                label="Mobile Apps"
+                delay="1.6s"
+              />
+              {/* Middle left */}
+              <ServiceTile
+                top="44%"
+                left="4%"
+                color="#fb923c"
+                bgColor="rgba(251,146,60,0.15)"
+                icon={<SettingsIcon />}
+                label="IT Consulting"
+                delay="2s"
+              />
+            </div>
+            {/* Decorative circle behind */}
+            <div className="absolute -bottom-8 -right-8 w-64 h-64 rounded-full border-2 border-dashed border-gray-300/60 -z-10" />
+            <div className="absolute -top-8 -left-8 w-40 h-40 rounded-full border border-gray-300/40 -z-10" />
+          </div>
+        </div>
+        {/* Bottom floating trust bar */}
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 hidden lg:flex items-center gap-1 px-6 py-3 rounded-full bg-white/70 backdrop-blur-md border border-black/[0.07] shadow-lg">
+          {["Strategy", "Design", "Development", "Analytics", "Support"].map(
+            (t, i) => (
+              <span key={i} className="flex items-center gap-1">
+                {i > 0 && (
+                  <span className="w-1 h-1 rounded-full bg-gray-300 mx-1" />
+                )}
+                <span className="text-xs font-semibold tracking-wide text-gray-500 uppercase">
+                  {t}
+                </span>
+              </span>
+            ),
+          )}
+        </div>
+      </section>
+      {/* ── MARQUEE STRIP ── */}
+      <div className="relative overflow-hidden bg-gray-950 py-4 select-none">
+        <div className="flex whitespace-nowrap animate-marquee">
+          {[...Array(3)].map((_, gi) =>
+            [
+              "Web Development",
+              "Mobile Apps",
+              "AI Solutions",
+              "Digital Marketing",
+              "Data Analytics",
+              "IT Consulting",
+              "UI/UX Design",
+              "Cloud Services",
+            ].map((label, i) => (
+              <span
+                key={`${gi}-${i}`}
+                className="inline-flex items-center gap-3 px-6 text-sm font-semibold tracking-widest uppercase text-white/30"
+              >
+                <span className="text-yellow-400/60">✦</span>
+                {label}
+              </span>
+            )),
+          )}
+        </div>
+        <style>{`
+          @keyframes marquee { from { transform: translateX(0) } to { transform: translateX(-33.333%) } }
+          .animate-marquee { animation: marquee 28s linear infinite; }
+          @keyframes float-a { 0%,100% { transform: translateY(0px) } 50% { transform: translateY(-8px) } }
+          @keyframes float-b { 0%,100% { transform: translateY(0px) } 50% { transform: translateY(-12px) } }
+          @keyframes float-c { 0%,100% { transform: translateY(0px) } 50% { transform: translateY(-6px) } }
+          .float-a { animation: float-a 4s ease-in-out infinite; }
+          .float-b { animation: float-b 5.5s ease-in-out infinite; }
+          .float-c { animation: float-c 3.5s ease-in-out infinite; }
+        `}</style>
+      </div>
+      {/* ── SERVICES PREVIEW ── */}
+      <section className="px-6 sm:px-10 lg:px-16 py-24 max-w-[1400px] mx-auto">
+        <div className="flex flex-col lg:flex-row gap-16 items-start">
+          <div className="lg:sticky lg:top-28 lg:w-72 shrink-0 space-y-5">
+            <p className="text-xs font-bold tracking-[0.25em] uppercase text-gray-400">
+              What we do
+            </p>
+            <h2 className="text-4xl sm:text-5xl font-black tracking-[-0.04em] text-gray-950 leading-tight">
+              Full-stack
+              <br />
+              <em className="font-light not-italic text-gray-400">digital</em>
+              <br />
+              excellence.
+            </h2>
+            <p className="text-gray-500 leading-relaxed text-sm">
+              From strategy to launch, we cover every layer of modern technology
+              delivery.
+            </p>
+            <Link
+              href="/portfolio"
+              className="inline-flex items-center gap-2 text-sm font-bold text-gray-900 border-b-2 border-yellow-400 pb-0.5 hover:border-orange-400 transition-colors"
+            >
+              All Services
+              <svg
+                className="w-3.5 h-3.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                strokeWidth="3"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                />
+              </svg>
+            </Link>
+          </div>
+          <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {[
+              {
+                num: "01",
+                title: "Web Development",
+                desc: "Custom applications built with modern frameworks, optimized for performance and conversions.",
+                color: "#6366f1",
+              },
+              {
+                num: "02",
+                title: "Mobile Apps",
+                desc: "Native and cross-platform apps that engage users with seamless, fluid experiences.",
+                color: "#10b981",
+              },
+              {
+                num: "03",
+                title: "AI Solutions",
+                desc: "Intelligent systems and chatbots that automate workflows and elevate customer interactions.",
+                color: "#06b6d4",
+              },
+              {
+                num: "04",
+                title: "Digital Marketing",
+                desc: "Data-driven campaigns that amplify brand visibility and drive measurable growth.",
+                color: "#f59e0b",
+              },
+              {
+                num: "05",
+                title: "Data Analytics",
+                desc: "Transform raw data into clarity with advanced dashboards and business intelligence tools.",
+                color: "#a855f7",
+              },
+              {
+                num: "06",
+                title: "IT Consulting",
+                desc: "Strategic technology guidance to modernize infrastructure and future-proof your business.",
+                color: "#fb923c",
+              },
+            ].map((s, i) => (
+              <div
+                key={i}
+                className="group relative p-7 rounded-2xl bg-white border border-gray-100 hover:border-gray-200 hover:shadow-2xl hover:shadow-black/[0.08] transition-all duration-400 cursor-pointer overflow-hidden"
+              >
+                {/* Accent left border on hover */}
+                <div
+                  className="absolute left-0 top-4 bottom-4 w-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{ background: s.color }}
+                />
+                <div className="flex items-start justify-between mb-5">
+                  <span className="text-[11px] font-bold tracking-[0.2em] text-gray-300">
+                    {s.num}
+                  </span>
                   <div
-                    className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300"
-                    style={{
-                      background: isOpen ? `${s.colorHex}18` : "#f9fafb",
-                    }}
+                    className="w-8 h-8 rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-1 group-hover:translate-y-0 flex items-center justify-center"
+                    style={{ background: `${s.color}20` }}
                   >
                     <svg
-                      className="w-4 h-4 transition-colors duration-300"
+                      className="w-4 h-4"
+                      style={{ color: s.color }}
                       fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={2}
-                      stroke={isOpen ? s.colorHex : "#9ca3af"}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d={s.iconPath}
-                      />
-                    </svg>
-                  </div>
-
-                  {/* Title + collapsed hint */}
-                  <div className="flex-1 min-w-0">
-                    <span
-                      className="block text-base sm:text-lg font-semibold transition-colors duration-200"
-                      style={{ color: isOpen ? "#111827" : "#374151" }}
-                    >
-                      {s.title}
-                    </span>
-                    {!isOpen && (
-                      <span className="block text-sm text-gray-400 mt-0.5 truncate">
-                        {s.shortDesc}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* +/× toggle */}
-                  <div
-                    className="w-7 h-7 rounded-full border flex items-center justify-center flex-shrink-0 transition-all duration-300"
-                    style={{
-                      borderColor: isOpen ? s.colorHex : "#e5e7eb",
-                      background: isOpen ? `${s.colorHex}10` : "transparent",
-                    }}
-                  >
-                    <svg
-                      className="w-3 h-3 transition-transform duration-300"
-                      style={{
-                        transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
-                        color: isOpen ? s.colorHex : "#9ca3af",
-                      }}
-                      fill="none"
-                      viewBox="0 0 24 24"
                       stroke="currentColor"
+                      viewBox="0 0 24 24"
                       strokeWidth={2.5}
                     >
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        d="M12 4v16m8-8H4"
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"
                       />
                     </svg>
                   </div>
-                </button>
-
-                {/* Expanded panel */}
-                <div
-                  className="overflow-hidden transition-all duration-500 ease-in-out"
-                  style={{
-                    maxHeight: isOpen ? "320px" : "0px",
-                    opacity: isOpen ? 1 : 0,
-                  }}
-                >
-                  <div className="pl-[4.25rem] pb-8 pr-4 sm:pr-12 grid grid-cols-1 sm:grid-cols-2 gap-8">
-                    <p className="text-gray-500 text-sm leading-relaxed">
-                      {s.longDesc}
-                    </p>
-                    <div className="space-y-5">
-                      <div className="space-y-2.5">
-                        {s.highlights.map((h, hi) => (
-                          <div key={hi} className="flex items-center gap-2.5">
-                            <span
-                              className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                              style={{ background: s.colorHex }}
-                            />
-                            <span className="text-sm text-gray-600 font-medium">
-                              {h}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-                      <Link
-                        href="/contact"
-                        className="inline-flex items-center gap-2 text-sm font-semibold transition-colors duration-200 group/link"
-                        style={{ color: s.colorHex }}
-                      >
-                        Get a free consultation
-                        <svg
-                          className="w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform duration-200"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth={2.5}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M13 7l5 5m0 0l-5 5m5-5H6"
-                          />
-                        </svg>
-                      </Link>
-                    </div>
-                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Footer nudge */}
-        <div className="mt-10 pt-8 border-t border-gray-100 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <p className="text-sm text-gray-400">
-            Not sure which service fits your needs?
-          </p>
-          <Link
-            href="/contact"
-            className="inline-flex items-center gap-2 text-sm font-semibold text-gray-900 hover:text-gray-500 transition-colors duration-200"
-          >
-            Talk to our team
-            <svg
-              className="w-3.5 h-3.5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2.5}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M13 7l5 5m0 0l-5 5m5-5H6"
-              />
-            </svg>
-          </Link>
-        </div>
-      </section>
-
-      {/* ── HOW WE WORK ── */}
-      <section className="px-4 sm:px-6 lg:px-8 py-16 md:py-18 bg-gray-50/70">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <span className="inline-block text-xs font-semibold tracking-[0.3em] uppercase text-violet-500 bg-violet-50 px-4 py-1.5 rounded-full mb-4">
-              Our Process
-            </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-              How We Work
-            </h2>
-            <p className="text-lg text-gray-500 max-w-2xl mx-auto">
-              A clear, repeatable process that keeps every project on track from
-              day one.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-            {process.map((p, i) => (
-              <div
-                key={i}
-                className="relative bg-white border border-gray-100 rounded-2xl p-7 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-              >
-                {i < process.length - 1 && (
-                  <div className="hidden lg:block absolute top-10 -right-2.5 w-5 h-px bg-gray-200 z-10" />
-                )}
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center mb-5 text-sm font-bold text-white"
-                  style={{
-                    background: `linear-gradient(135deg, ${p.color}cc, ${p.color})`,
-                  }}
-                >
-                  {p.step}
-                </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">
-                  {p.title}
+                <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-gray-950 transition-colors">
+                  {s.title}
                 </h3>
-                <p className="text-gray-500 text-sm leading-relaxed">
-                  {p.desc}
+                <p className="text-sm text-gray-500 leading-relaxed">
+                  {s.desc}
                 </p>
               </div>
             ))}
           </div>
         </div>
       </section>
-
-      {/* ── CTA ── */}
-      <section className="px-4 sm:px-6 lg:px-8 pb-24 max-w-3xl mx-auto text-center">
-        <span className="inline-block text-xs font-semibold tracking-[0.3em] uppercase text-emerald-500 bg-emerald-50 px-4 py-1.5 rounded-full mb-6">
-          Ready to start?
-        </span>
-        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-          Let's build something great together.
-        </h2>
-        <p className="text-gray-500 text-lg mb-8 max-w-xl mx-auto">
-          Tell us about your project and we'll get back to you within one
-          business day.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Link
-            href="/contact"
-            className="inline-flex items-center justify-center gap-2.5 px-9 py-4 text-base font-semibold text-white bg-gray-900 rounded-full hover:bg-gray-700 transition-all duration-200 shadow-md hover:shadow-lg"
-          >
-            Start a conversation
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              strokeWidth="2.5"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M13 7l5 5m0 0l-5 5m5-5H6"
-              />
-            </svg>
-          </Link>
-          <Link
-            href="/portfolio"
-            className="inline-flex items-center justify-center px-9 py-4 text-base font-semibold text-gray-700 bg-gray-100 rounded-full hover:bg-gray-200 transition-all duration-200"
-          >
-            See our work
-          </Link>
+      {/* ── CTA BAND ── */}
+      <section className="px-6 sm:px-10 lg:px-16 pb-24 max-w-[1400px] mx-auto">
+        <div
+          className="relative overflow-hidden rounded-[2.5rem] px-10 py-20 md:px-20 text-center"
+          style={{
+            background:
+              "linear-gradient(135deg, #0f0f0f 0%, #1e1b4b 50%, #0f172a 100%)",
+          }}
+        >
+          {/* Orbs */}
+          <div
+            className="absolute top-0 left-1/4 w-64 h-64 rounded-full blur-[80px]"
+            style={{ background: "rgba(99,102,241,0.2)" }}
+          />
+          <div
+            className="absolute bottom-0 right-1/4 w-64 h-64 rounded-full blur-[80px]"
+            style={{ background: "rgba(16,185,129,0.15)" }}
+          />
+          <div
+            className="absolute inset-0 opacity-[0.05]"
+            style={{
+              backgroundImage:
+                "linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px)",
+              backgroundSize: "48px 48px",
+            }}
+          />
+          <div className="relative space-y-6 max-w-2xl mx-auto">
+            <p className="text-xs font-bold tracking-[0.3em] uppercase text-white/40">
+              Ready to grow?
+            </p>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-[-0.04em] text-white leading-tight">
+              Let's build something
+              <br />
+              <span
+                className="text-transparent"
+                style={{ WebkitTextStroke: "1.5px rgba(255,255,255,0.3)" }}
+              >
+                extraordinary.
+              </span>
+            </h2>
+            <p className="text-gray-400 text-lg max-w-md mx-auto leading-relaxed">
+              Tell us about your project and we'll craft the right strategy to
+              move you forward.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+              <Link
+                href="/contact"
+                className="group inline-flex items-center justify-center gap-3 px-9 py-4 text-sm font-bold tracking-[0.08em] uppercase text-gray-950 bg-white rounded-full hover:bg-yellow-300 transition-all duration-300 shadow-xl hover:shadow-yellow-300/30 hover:scale-[1.03]"
+              >
+                Start a Project
+                <svg
+                  className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2.5}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
+                </svg>
+              </Link>
+              <Link
+                href="/portfolio"
+                className="inline-flex items-center justify-center px-9 py-4 text-sm font-bold tracking-[0.08em] uppercase text-white border border-white/20 rounded-full hover:border-white/50 hover:bg-white/5 transition-all duration-300"
+              >
+                See Our Work
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
-
-      <style>{`
-        @keyframes floatCard {
-          0%, 100% { transform: translateY(0px); }
-          50%       { transform: translateY(-10px); }
-        }
-      `}</style>
     </main>
   );
 }
+// ── Sub-components ──────────────────────────────────────────────────────────
+function ServiceTile({
+  top,
+  bottom,
+  left,
+  right,
+  color,
+  bgColor,
+  icon,
+  label,
+  delay,
+}: {
+  top?: string;
+  bottom?: string;
+  left?: string;
+  right?: string;
+  color: string;
+  bgColor: string;
+  icon: React.ReactNode;
+  label: string;
+  delay: string;
+}) {
+  const floatClass = [
+    "float-a",
+    "float-b",
+    "float-c",
+    "float-a",
+    "float-b",
+    "float-c",
+  ][Math.floor(Math.random() * 3)];
+  return (
+    <div
+      className={`absolute z-10 float-b`}
+      style={{ top, bottom, left, right, animationDelay: delay }}
+    >
+      <div
+        className="flex items-center gap-2.5 px-4 py-3 rounded-2xl border backdrop-blur-md shadow-lg"
+        style={{
+          background: bgColor,
+          borderColor: `${color}30`,
+          boxShadow: `0 8px 32px -4px ${color}30`,
+        }}
+      >
+        <div
+          className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+          style={{ background: `${color}25` }}
+        >
+          <span style={{ color }}>{icon}</span>
+        </div>
+        <span className="text-white font-semibold text-[13px] whitespace-nowrap">
+          {label}
+        </span>
+      </div>
+    </div>
+  );
+}
+// Icons
+const CloudIcon = () => (
+  <svg
+    className="w-4 h-4"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"
+    />
+  </svg>
+);
+const CodeIcon = () => (
+  <svg
+    className="w-4 h-4"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
+    />
+  </svg>
+);
+const ChartIcon = () => (
+  <svg
+    className="w-4 h-4"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+    />
+  </svg>
+);
+const BotIcon = () => (
+  <svg
+    className="w-4 h-4"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+    />
+  </svg>
+);
+const MobileIcon = () => (
+  <svg
+    className="w-4 h-4"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"
+    />
+  </svg>
+);
+const SettingsIcon = () => (
+  <svg
+    className="w-4 h-4"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+    strokeWidth={2}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+    />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+    />
+  </svg>
+);
