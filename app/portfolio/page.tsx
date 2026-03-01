@@ -1,5 +1,3 @@
-// Version 3.0 — Portfolio Page — V1 Content + V2 Aesthetics
-
 "use client";
 
 import React, { useState } from "react";
